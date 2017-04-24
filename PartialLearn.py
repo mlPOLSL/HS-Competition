@@ -3,15 +3,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-
-trainingSet_paths = ["C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet1.gz",
-                    "C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet2.gz",
-                    "C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet3.gz",
-                    "C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet4.gz"]
-testSet_paths = ["C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testSet1.gz",
-                 "C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testSet2.gz",
-                 "C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testSet3.gz"]
-
+from paths import testSet_paths,trainingSet_paths,deprecated_test_labels_path
 
 def load_batch(path):
     dataset = np.loadtxt(path, delimiter=',')
@@ -48,6 +40,6 @@ for path in trainingSet_paths:
         X_train = scaler.fit_transform(X_train)
         clf.partial_fit(X_train, y_train, classes)
 X_test = collide_testset(testSet_paths)
-y_test = np.loadtxt("C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testLabels\deprecated_testLabels.txt")
+y_test = np.loadtxt(deprecated_test_labels_path)
 X_test = scaler.transform(X_test)
 print("Accuracy: " + str(clf.score(X_test, y_test)))
