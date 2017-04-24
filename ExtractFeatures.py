@@ -1,17 +1,8 @@
 import json
 import numpy as np
+from paths import original_deprecated_testpaths, original_test_paths, original_training_paths
 
 j = {}
-trainingpaths = ["C:\\Users\\user\PycharmProjects\Hearthstone\\trainingData_JSON\\trainingData_JSON_chunk1.json",
-                 "C:\\Users\\user\\PycharmProjects\Hearthstone\\trainingData_JSON\\trainingData_JSON_chunk2.json",
-                 "C:\\Users\\user\\PycharmProjects\Hearthstone\\trainingData_JSON\\trainingData_JSON_chunk3.json",
-                 "C:\\Users\\user\PycharmProjects\Hearthstone\\trainingData_JSON\\trainingData_JSON_chunk4.json"]
-testpaths = ["C:\\Users\\user\PycharmProjects\Hearthstone\\testData_JSON\\testData_JSON_chunk8.json",
-             "C:\\Users\\user\\PycharmProjects\Hearthstone\\testData_JSON\\testData_JSON_chunk9.json",
-             "C:\\Users\\user\\PycharmProjects\Hearthstone\\testData_JSON\\testData_JSON_chunk10.json"]
-deprecated_testpaths = ["C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testData_JSON\\testData_JSON_chunk5.json",
-                        "C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testData_JSON\\testData_JSON_chunk6.json",
-                        "C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testData_JSON\\testData_JSON_chunk7.json"]
 
 coefficients = {
     'minions': {
@@ -47,8 +38,10 @@ def estimate_hand_value(hand):
         elif card['type'] == 'SPELL':
             hand_value += float(card['crystals_cost'])
         elif card['type'] == 'WEAPON':
-            hand_value += float(card['attack']) * coefficients['minions']['attack'] + float(card['durability']) * coefficients[
-                'weapon_durability'] + float(card['forgetful']) * coefficients['minions']['forgetful'] + float(
+            hand_value += float(card['attack']) * coefficients['minions']['attack'] + float(card['durability']) * \
+                                                                                      coefficients[
+                                                                                          'weapon_durability'] + float(
+                card['forgetful']) * coefficients['minions']['forgetful'] + float(
                 card['freeze']) * coefficients['minions']['freezing']
     return hand_value
 
@@ -74,7 +67,7 @@ def estimate_board_value(board):
 
 X = []
 x = []
-for i, path in enumerate(deprecated_testpaths, 1):
+for i, path in enumerate(testpaths, 1):
     with open(path) as file:
         print('opening another file')
         X.clear()
@@ -122,4 +115,3 @@ for i, path in enumerate(deprecated_testpaths, 1):
             X.append(x.copy())
         X_ = np.array(X.copy())
         np.savetxt('deprecated_testSet' + str(i) + '.gz', X_, delimiter=',')
-

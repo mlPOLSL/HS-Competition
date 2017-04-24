@@ -2,13 +2,7 @@ from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 from sklearn.feature_selection import SelectFromModel
 from sklearn.neural_network import MLPClassifier
-trainingSet_paths = ["C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet1.gz",
-                    "C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet2.gz",
-                    "C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet3.gz",
-                    "C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet4.gz"]
-testSet_paths = ["C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testSet1.gz",
-                 "C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testSet2.gz",
-                 "C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testSet3.gz"]
+from paths import testSet_paths,trainingSet_paths,deprecated_test_labels_path
 
 def collide_trainingset(paths):
     X = np.loadtxt(paths[0], delimiter=',')
@@ -38,7 +32,7 @@ model = SelectFromModel(estimator=forest, threshold=0.1, prefit=True)
 X_selected = model.transform(X_train)
 net.fit(X_selected, y_train)
 X_test = collide_testset(testSet_paths)
-y_test = np.loadtxt("C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testLabels\deprecated_testLabels.txt")
+y_test = np.loadtxt(deprecated_test_labels)
 X_test = model.transform(X_test)
 print("Accuracy: " + str(net.score(X_test, y_test)))
 # importances = forest.feature_importances_
