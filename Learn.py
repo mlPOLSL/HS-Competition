@@ -13,8 +13,8 @@ def collide_testset(paths):
     return X
 
 X = np.loadtxt("trainingSet_100k_v3.gz", delimiter=',')
-X_train = X[:, 0:33]
-y_train = X[:, 33]
+X_train = X[:, 0:35]
+y_train = X[:, 35]
 y_test = np.loadtxt(deprecated_test_labels_path)
 scaler = Normalizer(copy=False)
 clf = MLPClassifier(hidden_layer_sizes=(7,3), verbose=True)

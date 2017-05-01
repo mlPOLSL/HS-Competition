@@ -47,6 +47,13 @@ def estimate_hand_value(hand):
     return hand_value
 
 
+def calculate_real_hand_value(hand):
+    value = 0
+    for card in hand:
+        value += card['crystals_cost']
+    return value
+
+
 def estimate_board_value(board):
     board_value = 0
     for card in board:
@@ -65,12 +72,14 @@ def estimate_board_value(board):
         board_value += card_value
     return board_value
 
+
 def get_min_manacost(hand):
     min = 100
     for card in hand:
         if card['crystals_cost'] < min:
             min = card['crystals_cost']
     return min
+
 
 def get_max_manacost(hand):
     max = 0
@@ -79,13 +88,15 @@ def get_max_manacost(hand):
             max = card['crystals_cost']
     return max
 
+
 def get_average_manacost(hand):
     if len(hand) == 0:
         return 0.0
     sum = 0.0
     for card in hand:
         sum += float(card['crystals_cost'])
-    return sum/float(len(hand))
+    return sum / float(len(hand))
+
 
 def get_std_manacost(hand):
     if len(hand) == 0:
@@ -98,6 +109,7 @@ def get_std_manacost(hand):
     std = math.sqrt(std)
     return std
 
+
 def get_cards(hand):
     cards = []
     for card in hand:
@@ -105,6 +117,7 @@ def get_cards(hand):
     while len(cards) < 10:
         cards.append(0)
     return cards
+
 
 X = []
 x = []
@@ -115,7 +128,9 @@ with open("trainingData_JSON_100k.txt") as file:
         j = json.loads(line)
         x.clear()
         cards = get_cards(j['player']['hand'])
-        hand_strength = estimate_hand_value(j['player']['hand'])
+        estimated_hand_strength = estimate_hand_value(j['player']['hand'])
+        real_hand_strength = calculate_real_hand_value(j['player']['hand'])
+        difference = estimated_hand_strength - real_hand_strength
         player_board_strength = estimate_board_value(j['player']['played_cards'])
         enemy_board_strength = estimate_board_value(j['opponent']['played_cards'])
         player_health = int(j['player']['hero']['armor']) + int(j['player']['hero']['hp'])
@@ -141,7 +156,9 @@ with open("trainingData_JSON_100k.txt") as file:
         decision = int(j['decision'])
         for card in cards:
             x.append(card)
-        x.append(hand_strength)
+        x.append(estimated_hand_strength)
+        x.append(real_hand_strength)
+        x.append(difference)
         x.append(player_board_strength)
         x.append(enemy_board_strength)
         x.append(player_health)
