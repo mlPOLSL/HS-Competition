@@ -21,3 +21,7 @@ trainingSet_paths = ["C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet1.
 testSet_paths = ["C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testSet1.gz",
                  "C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testSet2.gz",
                  "C:\\Users\\user\PycharmProjects\Hearthstone\deprecated_testSet3.gz"]
+
+testSetLabelsJSON100K = "/Users/apple/PycharmProjects/HS-Competition/data/testData_JSON_100k/testData_JSON_100k_labels.txt"
+testSetJSON100K = "/Users/apple/PycharmProjects/HS-Competition/data/testData_JSON_100k/testData_JSON_100k.txt"
+trainingSetJSON100k = "/Users/apple/PycharmProjects/HS-Competition/data/trainingData_JSON_100k.txt"
