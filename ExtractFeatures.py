@@ -1,5 +1,6 @@
 import json
 import numpy as np
+import math
 from paths import original_deprecated_testpaths, original_test_paths, original_training_paths
 
 j = {}
@@ -65,15 +66,62 @@ def estimate_board_value(board):
     return board_value
 
 
+def get_min_manacost(hand):
+    min = 100
+    for card in hand:
+        if card['crystals_cost'] < min:
+            min = card['crystals_cost']
+    return min
+
+
+def get_max_manacost(hand):
+    max = 0
+    for card in hand:
+        if card['crystals_cost'] > max:
+            max = card['crystals_cost']
+    return max
+
+
+def get_average_manacost(hand):
+    if len(hand) == 0:
+        return 0.0
+    sum = 0.0
+    for card in hand:
+        sum += float(card['crystals_cost'])
+    return sum / float(len(hand))
+
+
+def get_std_manacost(hand):
+    if len(hand) == 0:
+        return 0.0
+    average = get_average_manacost(hand)
+    std = 0.0
+    for card in hand:
+        std += math.pow(float(card['crystals_cost']) - average, 2)
+    std /= float(len(hand))
+    std = math.sqrt(std)
+    return std
+
+
+def get_cards(hand):
+    cards = []
+    for card in hand:
+        cards.append(card['crystals_cost'])
+    while len(cards) < 10:
+        cards.append(0)
+    return cards
+
+
 X = []
 x = []
-for i, path in enumerate(testpaths, 1):
+for i, path in enumerate(original_test_paths, 1):
     with open(path) as file:
         print('opening another file')
         X.clear()
         for line in file:
             j = json.loads(line)
             x.clear()
+            cards = get_cards(j['player']['hand'])
             hand_strength = estimate_hand_value(j['player']['hand'])
             player_board_strength = estimate_board_value(j['player']['played_cards'])
             enemy_board_strength = estimate_board_value(j['opponent']['played_cards'])
@@ -89,10 +137,17 @@ for i, path in enumerate(testpaths, 1):
             enemy_deck_count = int(j['opponent']['stats']['deck_count'])
             player_fatique_damage = int(j['player']['stats']['fatigue_damage'])
             enemy_fatique_damage = int(j['opponent']['stats']['fatigue_damage'])
-            player_spell_dmg_bonus = int(j['player']['stats']['spell_dmg_bonus'])
-            enemy_spell_dmg_bonus = int(j['opponent']['stats']['spell_dmg_bonus'])
             turn = int(j['turn'])
+            min_card_manacost = int(get_min_manacost(j['player']['hand']))
+            max_card_manacost = int(get_max_manacost(j['player']['hand']))
+            average_manacost = float(get_average_manacost(j['player']['hand']))
+            std_manacost = float(get_std_manacost(j['player']['hand']))
+            card_advantage = int(j['opponent']['stats']['deck_count'] - j['player']['stats']['deck_count'])
+            player_played_minions_count = int(j['player']['stats']['played_minions_count'])
+            enemy_played_minions_count = int(j['opponent']['stats']['played_minions_count'])
             # decision = int(j['decision'])
+            for card in cards:
+                x.append(card)
             x.append(hand_strength)
             x.append(player_board_strength)
             x.append(enemy_board_strength)
@@ -108,10 +163,15 @@ for i, path in enumerate(testpaths, 1):
             x.append(enemy_deck_count)
             x.append(player_fatique_damage)
             x.append(enemy_fatique_damage)
-            x.append(player_spell_dmg_bonus)
-            x.append(enemy_spell_dmg_bonus)
             x.append(turn)
+            x.append(min_card_manacost)
+            x.append(max_card_manacost)
+            x.append(average_manacost)
+            x.append(std_manacost)
+            x.append(card_advantage)
+            x.append(player_played_minions_count)
+            x.append(enemy_played_minions_count)
             # x.append(decision)
             X.append(x.copy())
         X_ = np.array(X.copy())
-        np.savetxt('deprecated_testSet' + str(i) + '.gz', X_, delimiter=',')
+        np.savetxt('testSet' + str(i) + '_v3.gz', X_, delimiter=',')

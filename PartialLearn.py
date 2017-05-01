@@ -3,7 +3,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from paths import testSet_paths,trainingSet_paths,deprecated_test_labels_path
+from paths import testSet_paths_v2,trainingSet_paths_v2,deprecated_test_labels_path
 
 def load_batch(path):
     dataset = np.loadtxt(path, delimiter=',')
@@ -11,7 +11,7 @@ def load_batch(path):
 
 def get_minibatch(dataset, range):
     try:
-        X, y = dataset[range[0]:range[1], 0:18], dataset[range[0]:range[1], 18]
+        X, y = dataset[range[0]:range[1], 0:25], dataset[range[0]:range[1], 25]
     except ValueError:
         return None, None
     return X, y
@@ -28,7 +28,7 @@ scaler = StandardScaler(copy=False)
 clf = MLPClassifier(hidden_layer_sizes=(7, 3))
 init_range = 10000
 classes = np.array([0, 1])
-for path in trainingSet_paths:
+for path in trainingSet_paths_v2:
     batch = load_batch(path)
     print("another batch")
     for i in range(0, 50):
@@ -39,7 +39,7 @@ for path in trainingSet_paths:
             break
         X_train = scaler.fit_transform(X_train)
         clf.partial_fit(X_train, y_train, classes)
-X_test = collide_testset(testSet_paths)
+X_test = collide_testset(testSet_paths_v2)
 y_test = np.loadtxt(deprecated_test_labels_path)
 X_test = scaler.transform(X_test)
 print("Accuracy: " + str(clf.score(X_test, y_test)))
