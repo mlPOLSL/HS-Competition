@@ -46,6 +46,12 @@ def estimate_hand_value(hand):
                 card['freeze']) * coefficients['minions']['freezing']
     return hand_value
 
+def calculate_real_hand_value(hand):
+    value = 0
+    for card in hand:
+        value += card['crystals_cost']
+    return value
+
 
 def estimate_board_value(board):
     board_value = 0
@@ -114,7 +120,8 @@ def get_cards(hand):
 
 X = []
 x = []
-for i, path in enumerate(original_test_paths, 1):
+lines = 0
+for i, path in enumerate(original_deprecated_testpaths, 1):
     with open(path) as file:
         print('opening another file')
         X.clear()
@@ -122,7 +129,9 @@ for i, path in enumerate(original_test_paths, 1):
             j = json.loads(line)
             x.clear()
             cards = get_cards(j['player']['hand'])
-            hand_strength = estimate_hand_value(j['player']['hand'])
+            estimated_hand_strength = estimate_hand_value(j['player']['hand'])
+            real_hand_strength = calculate_real_hand_value(j['player']['hand'])
+            difference = estimated_hand_strength - real_hand_strength
             player_board_strength = estimate_board_value(j['player']['played_cards'])
             enemy_board_strength = estimate_board_value(j['opponent']['played_cards'])
             player_health = int(j['player']['hero']['armor']) + int(j['player']['hero']['hp'])
@@ -148,7 +157,9 @@ for i, path in enumerate(original_test_paths, 1):
             # decision = int(j['decision'])
             for card in cards:
                 x.append(card)
-            x.append(hand_strength)
+            x.append(estimated_hand_strength)
+            x.append(real_hand_strength)
+            x.append(difference)
             x.append(player_board_strength)
             x.append(enemy_board_strength)
             x.append(player_health)
@@ -174,4 +185,4 @@ for i, path in enumerate(original_test_paths, 1):
             # x.append(decision)
             X.append(x.copy())
         X_ = np.array(X.copy())
-        np.savetxt('testSet' + str(i) + '_v3.gz', X_, delimiter=',')
+        np.savetxt('testSet' + str(i) + '_v4.gz', X_, delimiter=',')

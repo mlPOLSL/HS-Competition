@@ -5,13 +5,15 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from paths import testSet_paths_v2,trainingSet_paths_v2,deprecated_test_labels_path
 
+NO_OF_FEATURES = 36
+
 def load_batch(path):
     dataset = np.loadtxt(path, delimiter=',')
     return dataset
 
 def get_minibatch(dataset, range):
     try:
-        X, y = dataset[range[0]:range[1], 0:25], dataset[range[0]:range[1], 25]
+        X, y = dataset[range[0]:range[1], 0:NO_OF_FEATURES - 1], dataset[range[0]:range[1], NO_OF_FEATURES - 1]
     except ValueError:
         return None, None
     return X, y
