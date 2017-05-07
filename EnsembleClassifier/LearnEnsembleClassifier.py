@@ -7,20 +7,26 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from EnsembleClassifier.MajorityVoteClassifier import MajorityVoteClassifier
 import numpy as np
+from sklearn.externals import joblib
+import glob
+from paths import testSet_paths, pickle_classifiers
+
+def collide_testset(paths):
+    X = np.loadtxt(paths[0], delimiter=',')
+    X1 = np.loadtxt(paths[1], delimiter=',')
+    X = np.vstack([X, X1])
+    X2 = np.loadtxt(paths[2], delimiter=',')
+    X = np.vstack([X, X2])
+    return X
 
 
-X = np.loadtxt("C:\\Users\\user\PycharmProjects\Hearthstone\\trainingSet_100k_v4.gz", delimiter=',')
-X_train = X[:, 0:35]
-y_train = X[:, 35]
-clf1 = LogisticRegression(solver='liblinear', C=10, random_state=0)
-clf3 = MLPClassifier(alpha=1, hidden_layer_sizes=(50, 30), learning_rate_init=0.0001)
-clf2 = RandomForestClassifier()
-pipe1 = Pipeline([['sc', StandardScaler()], ['clf', clf1]])
-pipe3 = Pipeline([['sc', StandardScaler()], ['clf', clf3]])
-# clf_labels = ['Logistic Regression', 'MLP', 'RandomForestClassifier']
-mv_clf = MajorityVoteClassifier(classifiers=[pipe1, clf2, pipe3], weights=[0.4, 0.2, 0.4], vote='probability')
-clf_labels = ['Majority Voting']
-all_clf = [mv_clf]
-for clf, label in zip(all_clf, clf_labels):
-    scores = cross_val_score(estimator=clf, X=X_train, y=y_train, cv=10, scoring='roc_auc')
-    print("Accuracy: %0.6f (+/- %0.6f) [%s]" % (scores.mean(), scores.std(), label))
+classifiers =[]
+dir = glob.glob("C:\\Users\\user\PycharmProjects\Hearthstone\FittedClassifiers\*.pkl")
+for path in dir:
+    classifiers.append(joblib.load(path))
+mv_clf = MajorityVoteClassifier(classifiers=classifiers, fitted=True)
+X_test = collide_testset(testSet_paths)
+proba = mv_clf.predict(X_test)
+with open("results_myller_v7.txt", 'w') as file:
+    for prob in proba:
+        file.write(str(prob[1]) + '\n')

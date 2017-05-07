@@ -27,13 +27,14 @@ class MajorityVoteClassifier(BaseEstimator, ClassifierMixin):
     importance; Uses uniform weights if `weights=None`.
     """
 
-    def __init__(self, classifiers, vote='classlabel', weights=None):
+    def __init__(self, classifiers, vote='classlabel', weights=None, fitted=False):
         self.classifiers = classifiers
         self.named_classifiers = {key: value for
                                   key, value in
                                   _name_estimators(classifiers)}
         self.vote = vote
         self.weights = weights
+        self.classifiers_fitted = fitted
 
     def fit(self, X, y):
         """ Fit classifiers.
@@ -73,10 +74,16 @@ class MajorityVoteClassifier(BaseEstimator, ClassifierMixin):
             maj_vote = np.argmax(self.predict_proba(X), axis=1)
         else:  # 'classlabel' vote
             # Collect results from clf.predict calls
-            predictions = np.asarray([clf.predict(X)
-                                      for clf in self.classifiers_]).T
-            maj_vote = np.apply_along_axis(lambda x: np.argmax(np.bincount(x, weights=self.weights)), axis=1,
-                                           arr=predictions)
+            if self.classifiers_fitted:
+                predictions = np.asarray([clf.predict(X)
+                                          for clf in self.classifiers]).T
+                maj_vote = np.apply_along_axis(lambda x: np.argmax(np.bincount(x, weights=self.weights)), axis=1,
+                                               arr=predictions)
+            else:
+                predictions = np.asarray([clf.predict(X)
+                                          for clf in self.classifiers_]).T
+                maj_vote = np.apply_along_axis(lambda x: np.argmax(np.bincount(x, weights=self.weights)), axis=1,
+                                               arr=predictions)
         maj_vote = self.lablenc_.inverse_transform(maj_vote)
         return maj_vote
 
@@ -96,7 +103,10 @@ class MajorityVoteClassifier(BaseEstimator, ClassifierMixin):
         Weighted average probability for
         each class per sample.
         """
-        probas = np.asarray([clf.predict_proba(X) for clf in self.classifiers_])
+        if self.classifiers_fitted:
+            probas = np.asarray([clf.predict_proba(X) for clf in self.classifiers])
+        else:
+            probas = np.asarray([clf.predict_proba(X) for clf in self.classifiers_])
         avg_proba = np.average(probas, axis=0, weights=self.weights)
         return avg_proba
 
