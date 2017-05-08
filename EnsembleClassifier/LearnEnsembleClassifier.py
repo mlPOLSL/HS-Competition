@@ -26,7 +26,7 @@ for path in dir:
     classifiers.append(joblib.load(path))
 mv_clf = MajorityVoteClassifier(classifiers=classifiers, fitted=True)
 X_test = collide_testset(testSet_paths)
-proba = mv_clf.predict(X_test)
+proba = mv_clf.predict_proba(X_test)
 with open("results_myller_v7.txt", 'w') as file:
     for prob in proba:
         file.write(str(prob[1]) + '\n')
