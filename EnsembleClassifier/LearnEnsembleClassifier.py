@@ -11,6 +11,8 @@ from sklearn.externals import joblib
 import glob
 from paths import testSet_paths, pickle_classifiers
 
+pickles_dir = "C:\\Users\\user\PycharmProjects\Hearthstone\PicklesFinal\\"
+
 def collide_testset(paths):
     X = np.loadtxt(paths[0], delimiter=',')
     X1 = np.loadtxt(paths[1], delimiter=',')
@@ -21,12 +23,12 @@ def collide_testset(paths):
 
 
 classifiers =[]
-dir = glob.glob("C:\\Users\\user\PycharmProjects\Hearthstone\FittedClassifiers\*.pkl")
+dir = glob.glob(pickles_dir + "*.pkl")
 for path in dir:
     classifiers.append(joblib.load(path))
 mv_clf = MajorityVoteClassifier(classifiers=classifiers, fitted=True)
 X_test = collide_testset(testSet_paths)
-proba = mv_clf.predict(X_test)
-with open("results_myller_v7.txt", 'w') as file:
+proba = mv_clf.predict_proba(X_test)
+with open("results_myller_v12.txt", 'w') as file:
     for prob in proba:
         file.write(str(prob[1]) + '\n')
