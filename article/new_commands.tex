@@ -1,0 +1,194 @@
+% General (SVM) symbols
+\newcommand{\TrainingSample}{\bm{x}} % OK
+\newcommand{\InputSample}{\bm{a}} % OK
+\newcommand{\WeightVector}{\bm{w}} % OK
+\newcommand{\MaximumMargin}{\varphi} % OK
+\newcommand{\Bias}{b} % OK
+\newcommand{\ClassLabel}{y} % OK
+\newcommand{\InputDimensionality}{\mathcal{D}} % OK
+\newcommand{\RealSet}{\mathbb{R}^{\rm \mathcal{D}}} % OK
+\newcommand{\RealValue}{\mathbb{R}} % OK
+\newcommand{\ClassA}{C_{+}} % OK
+\newcommand{\ClassB}{C_{-}} % OK
+\newcommand{\Slack}{\xi} % OK
+\newcommand{\KernelMap}{\phi} % OK
+\newcommand{\PenaltyParameter}{C} % OK
+\newcommand{\RBFGamma}{\gamma} % OK
+\newcommand{\KernelFunction}{\mathcal{K}} % OK
+\newcommand{\FeatureSpace}{\mathbb{F}} % OK
+\newcommand{\LagrangeMultiplier}{\alpha} % OK
+\newcommand{\SVMTrainingTimeComplexity}{O(\TrainingSetSize^3)}
+\newcommand{\SVMTrainingMemoryComplexity}{O(\TrainingSetSize^2)}
+\newcommand{\PolynomialDegree}{l} % OK
+\newcommand{\SigmoidBias}{\kappa} % OK
+\newcommand{\Lagrangian}{\mathcal{L}} % OK
+\def\sgn{\mathop{\rm sgn}\nolimits}
+
+% Fuzzy kernel symbols
+\newcommand{\NumberOfFuzzyRules}{L_{f}} % OK
+\newcommand{\FuzzyRule}{l_{f}} % OK
+\newcommand{\fuzzyImplication}{\rightsquigarrow} % OK
+\newcommand{\term}[1]{\mathfrak{#1}}
+\newcommand{\zbior}[1]{\mathbb{#1}}  % set
+\newcommand{\macierz}[1]{{\boldsymbol{\mathrm{#1}}}}
+\newcommand{\wektor}[1]{\macierz{\MakeLowercase{#1}}}
+\newcommand{\newItem}[2]{%
+  \expandafter\def\csname #1\endcsname {\MakeLowercase{#2}} %
+  \expandafter\def\csname n#1\endcsname {\MakeUppercase{#2}} %
+  \expandafter\def\csname zb#1\endcsname {\zbior{\MakeUppercase{#2}}} %
+  \expandafter\def\csname t#1\endcsname {\term{\MakeLowercase{#2}}} %
+  \expandafter\def\csname m#1\endcsname {\macierz{\MakeUppercase{#2}}} %
+  \expandafter\def\csname w#1\endcsname {\wektor{#2}} %
+  }
+  \newItem{Atrybut}{d_f}
+\newItem{Deskryptor}{x}
+\newItem{Regula}{l}
+\newItem{Przeslanka}{a}
+\newItem{Konsekwencja}{b}
+\newItem{Implikacja}{b'}
+\newItem{Zespolona}{c}
+\newItem{Rzeczywista}{r}
+\newItem{Klasa}{\delta}
+\newItem{Decyzja}{y}
+\newItem{Przyklad}{a}
+\newItem{Test}{a}
+\newItem{Klaster}{c}
+\newItem{Rozmycie}{s}
+\newItem{Centre}{v}
+\newItem{Membership}{u}
+\newItem{ClusterMembership}{\mu}
+\newItem{Weight}{z}
+\newItem{Krotka}{x}
+\newItem{Width}{w}
+\newItem{Wspolczynnik}{p}
+\newItem{Obiekt}{k}
+\newItem{Odleglosc}{t}
+\newItem{Parameter}{p}
+\newcommand{\reg}{^{(\Regula)}}
+\newcommand{\T}{\mathrm{T}}
+\newcommand{\tr}{^{\T}}
+
+% operatory
+%\DeclareMathOperator*{\tnorm}{\star}
+%\DeclareMathOperator*{\opBigTnorm}{\bigstar}
+%\newcommand{\bigtnorm}[2]{\opBigTnorm\limits^{#2}_{#1}}
+% \newcommand{\tNormOp}[2]{#1 \tnorm #2}
+%\newcommand{\tNormOp}[2]{T \left(#1, #2\right)}
+%\DeclareMathOperator{\abs}{\mathrm{sgn}}
+%\newcommand{\firStr}{F} % firing strength
+%\newcommand{\w}[1]{\macierz{#1}}
+
+\newcommand{\localisation}{y}
+\newcommand{\SystemAnswer}{\localisation_0}
+\newcommand{\kernelNFSEXP}{NFS-exponential}
+\newcommand{\kernelNFSPROD}{NFS-product}
+
+% General (algorithm) symbols
+\newcommand{\ChromosomeHalfSize}{K} % OK
+\newcommand{\Generation}{G} % OK
+\newcommand{\NumberOfGenerations}{g} % OK
+\newcommand{\PopulationSizeSet}{N} % OK
+\newcommand{\PopulationSizeModel}{M} % OK
+\newcommand{\Fitness}{\eta} % OK
+\newcommand{\FitnessForValidationSet}{\eta_{\ValidationSet}} % OK
+\newcommand{\IndividualSet}{p}
+\newcommand{\IndividualModel}{q}
+\newcommand{\TrainingSet}{\bm{T}} % OK
+\newcommand{\TrainingSetSize}{t}
+\newcommand{\ValidationSet}{\bm{V}} % OK
+\newcommand{\TestSet}{\Psi}
+\newcommand{\ValidationSetSize}{v}
+\newcommand{\RefinedTrainingSet}{\bm{T'}}
+\newcommand{\RefinedTrainingSetSize}{t'}
+\newcommand{\RefinedTrainingSetASize}{t'_{+}}
+\newcommand{\RefinedTrainingSetBSize}{t'_{-}}
+\newcommand{\RefinedTrainingIthSet}{\bm{T'_{i}}} % OK
+\newcommand{\BestIndividualSet}{p^B} % OK
+\newcommand{\BestIndividualModel}{q^B} % OK
+\newcommand{\NumberOfSupportVectors}{s}
+\newcommand{\AveragePopulationFitness}{\bar{\eta}} % OK
+\newcommand{\MutationProbabilitySet}{\mathcal{P}_m^{\RefinedTrainingSet}} % OK
+\newcommand{\MutationScaleSet}{f_m} % OK
+\newcommand{\MutationProbabilityModel}{\mathcal{P}_m^{\SVMModel}} % OK
+\newcommand{\MutationScaleModel}{\mathcal{\delta}_m} % OK
+\newcommand{\CrossoverProbabilityModel}{\mathcal{P}_c^{\SVMModel}} % OK
+\newcommand{\CrossoverAlphaParameter}{\alpha_{\SVMModel}} % OK
+\newcommand{\MaxExecutionTime}{\tau_M} % OK
+\newcommand{\ConvergenceTime}{\tau_{c}} % OK
+\newcommand{\PercentageOfSVsInIndividual}{\varrho_{SV}}
+\newcommand{\SVMModel}{\mathcal{M}}
+\newcommand{\UniformDistribution}{\mathcal{U}}
+
+% GASVM symbols
+\newcommand{\GASVMRegenerationCoefficient}{c_{g}}
+\newcommand{\GASVMHLFCoefficient}{c_{h}}
+\newcommand{\GASVMTruncationCoefficient}{c_{t}}
+\newcommand{\GASVMEnhancedTruncationCoefficient}{c_{e}}
+\newcommand{\GASVMReproductionCoefficient}{c_{r}}
+\newcommand{\GASVMRestoringCoefficient}{c_{c}}
+\newcommand{\GASVMMinimumImprovementThreshold}{\epsilon_{I}}
+\newcommand{\GASVMMaximumStableBestFitnessCounter}{s_{b}}
+\newcommand{\GASVMMaximumStableAverageFitnessCounter}{s_{a}}
+\newcommand{\GASVMMaximumNumberOfRegenerations}{r}
+
+% AGA symbols
+\newcommand{\AGAInitialK}{K_i} % OK
+\newcommand{\AGAPreviousK}{K^P}
+\newcommand{\AGACounterWithoutBestFitnessIncrease}{c_B} % OK
+\newcommand{\AGACounterWithoutAverageFitnessIncrease}{c_A} % OK
+\newcommand{\AGADistanceBetweenIndividuals}{\rho} % OK
+\newcommand{\AGASimilarity}{S} % OK
+\newcommand{\AGAIndicesHistogram}{H}
+\newcommand{\AGAHistogramBin}{h}
+\newcommand{\AGAIntervalEndpoint}{C}
+\newcommand{\AGAInitialPopulationSize}{N_i}
+\newcommand{\AGAPopulationGrowthFactor}{\omega}
+\newcommand{\AGAMaxNumberOfRegenerationsWithGrow}{R}
+\newcommand{\AGAMaxNumberOfRegenerationsWithoutGrow}{R^C}
+\newcommand{\AGAKIncreaseFactor}{\mu}
+\newcommand{\AGAPopulationSizeIncreaseFactor}{\omega}
+\newcommand{\AGAPCADimensionality}{d} % OK
+\newcommand{\AGAPCAIthIntervals}{\mathcal{C}^{(i)}} % OK
+\newcommand{\AGAPCAIntervals}{\mathcal{C}} % OK
+\newcommand{\AGAEigenvector}{\bm{e}}
+\newcommand{\AGAEigenvalue}{\lambda}
+\newcommand{\AGAPopulationDiversity}{\phi}
+\newcommand{\AGAFitnessDeviationOfBestIndividual}{\sigma_\Fitness}
+\newcommand{\AGAPopulationDiversityDeviation}{\sigma_P}
+\newcommand{\AGANumberOfGenerationsWithPopulationDiversity}{s_\phi}
+\newcommand{\AGAMinimumDistanceBetweenIndividualsForTournament}{d_m}
+\newcommand{\AGASteadyStateFlag}{u_B}
+
+% DAGA symbols
+\newcommand{\DAGABestFitnessBeforeIncrease}{\eta_I}
+\newcommand{\DAGABestFitnessInPreviousGeneration}{\eta_P}
+\newcommand{\DAGAStableChromosomeCounter}{c_s}
+\newcommand{\DAGATotalImprovement}{\Delta_T}
+\newcommand{\DAGARecentImprovement}{\Delta_R}
+%\newcommand{\DAGASVRatio}{\varrho_{SV}}
+\newcommand{\DAGASVRatioThreshold}{\mathcal{T}_{\rm SV}}
+\newcommand{\DAGAIncreaseFactor}{\delta_K}
+\newcommand{\DAGAStableChromomosmeLimit}{\mathcal{T}_s}
+
+% MASVM symbols
+\newcommand{\MASVMSVPoolSize}{t^s} % OK
+\newcommand{\MASVMSupportVectorsPool}{\bm{P}} % OK
+\newcommand{\MASVMEducationProbability}{\mathcal{P}_e} % OK
+\newcommand{\MASVMLGACoefficient}{\epsilon_{\rm LGA}} % OK
+\newcommand{\MASVMPercentageOfSIs}{\chi} % OK
+
+% PCAAMA symbols
+\newcommand{\PCAAMAAlgorithmName}{PCA$^2$MA}
+\newcommand{\PCAAMAValuableSamplesSetSize}{t^c} % OK
+\newcommand{\PCAAMAValuableSamplesSet}{\bm{T^c}} % OK
+\newcommand{\PCAAMAValuableSamplesSetA}{\bm{T^c_{+}}}
+\newcommand{\PCAAMAValuableSamplesSetB}{\bm{T^c_{-}}}
+\newcommand{\PCAAMAPCATime}{\tau_{\rm PCA}} % OK
+\newcommand{\PCAAMAPercentageOfRemovedSamplesFromCluster}{\zeta} % OK
+\newcommand{\PCAAMAKIncrement}{\Delta_K}
+\newcommand{\PCAAMAAverageNumberOfSVs}{\bar{s}}
+%\newcommand{\PCAAMAMaxMATime}{\tau_{\rm MA}} % OK
+
+% Experimental validation symbols
+\newcommand{\QualityFunction}{Q}
+\newcommand{\QualityImportanceFunction}{q} 

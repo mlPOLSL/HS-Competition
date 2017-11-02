@@ -1,0 +1,135 @@
+\documentclass{svproc}
+
+\usepackage{amssymb}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+
+\usepackage{epsfig}
+\usepackage{subfigure}
+\usepackage{calc}
+\usepackage{multicol}
+\usepackage{multirow}
+%\usepackage{pslatex}
+\usepackage{bm}
+\usepackage{colortbl}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{url}
+\usepackage{arydshln}
+
+\usepackage{mathrsfs}
+
+\usepackage{colortbl}
+
+\usepackage{xcolor}% http://ctan.org/pkg/xcolor
+\usepackage{makecell}
+
+\usepackage{algorithm}
+%\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{verbatim}
+\usepackage{moreverb}			% for verbatimtabinput
+
+\input{new_commands.tex}
+\newcommand{\cmt}[1]{}
+
+%\usepackage{algorithmic}
+\usepackage{etoolbox}
+\newcommand{\doinparallel}{\textbf{do in parallel}}
+\makeatletter
+%\AtBeginEnvironment{algorithmic}{%
+%  \newcommand{\PARFOR}[2][default]{\ALC@it\algorithmicfor\ #2\ %
+%    \algorithmicdoinparallel\ALC@com{#1}\begin{ALC@for}}%
+%}
+\makeatother
+
+% declaration of the new block
+\algblock{ParFor}{EndParFor}
+% customising the new block
+\algnewcommand\algorithmicparfor{\textbf{parfor}}
+\algnewcommand\algorithmicpardo{\textbf{do}}
+\algnewcommand\algorithmicendparfor{\textbf{end\ parfor}}
+\algrenewtext{ParFor}[1]{\algorithmicparfor\ #1\ \algorithmicpardo}
+\algrenewtext{EndParFor}{\algorithmicendparfor}
+
+\urldef{\mailPolsl}\path|jakub.nalepa@polsl.pl|
+
+\begin{document}
+\title{Ensemble of Classifiers for Evaluating Game States in Heartstone: Heroes of Warcraft}
+\author{Michal Myller \and Krzysztof Hrynczenko \and Szymon Piechaczek \and Jakub Nalepa}
+%
+\authorrunning{M. Myller, K. Hrynczenko, Sz. Piechaczek, and J. Nalepa}
+\titlerunning{Ensemble of Classifiers for Evaluating Game States in Heartstone}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{Silesian University of
+Technology, Gliwice, Poland\\
+%\email{blochom@gmail.com}\\
+\mailPolsl
+%\email{\{mkawulok, jnalepa, wdudzik\}@future-processing.com}
+%\email{\{michal.kawulok, jakub.nalepa\}@polsl.pl; wdudzik@future-processing.com}
+}
+\maketitle
+
+%\authorrunning{M. Blocho and J. Nalepa}
+%\titlerunning{LCS-Based Selective Route Exchange Crossover for the PDPTW}
+
+%\begin{abstract}
+
+%Estimating the theoretical complexity of a parallel algorithm can give an impression on how it will perform in practice. However, this complexity analysis is very often omitted in the works from the parallel computation field. In this paper, we theoretically analyze the time complexity of our parallel algorithm for the pickup and delivery problem with time windows (PDPTW), which is an NP-hard discrete optimization task. The PDPTW is a hierarchical objective problem---the main objective is to minimize the number of trucks serving the transportation requests, whereas the second objective is to optimize the travel distance. In our approach, the fleet size is optimized using the parallel ejection search, and the distance is minimized using the parallel memetic algorithm. Finally, we report example experimental results showing that our parallel algorithms work very fast in practice.
+
+%\end{abstract}
+%\keywords{Complexity analysis, PDPTW, Parallel Memetic Algorithm.}
+
+\section{Introduction} \label{sec:Introduction}
+
+In this report, we briefly present our approach for evaluating intra-game states in Heartstone: Heroes of Warcraft using an ensemble of classifiers. This technique was exploited to elaborate the class labels for the test set ($\TestSet$) provided by the organizers of the \emph{AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone} held at the FedCSIS 2017 meeting. The initial evaluation of the results obtained with our classification engine (performed at the competition server using approximately $5\%$ of the test data) gave the performance of $.7951$ (area under the receiver operating characteristic curve). The predictions were submitted by Krzysztof Hrynczenko (jenio) on 2017-05-14, at 21:56:20.
+
+\section{Additional Features} \label{sec:AlgorithmDescription}
+
+The additional features included (all the features were normalized by removing the mean and scaling to unit variance):
+
+\begin{itemize}
+  \item \textbf{Cost of each card}. The cost of each card was calculated using the method introduced by Elie Bursztein\footnote{https://www.elie.net/blog/hearthstone/how-to-appraise-hearthstone-card-values}. These costs allowed to quantify the cards and distinguish the most valuable ones (according to their mana cost and abilities). This approach could be potentially used for spells as well, however it would require understanding the possible interactions between the cards in more detail. Also, it would be tricky to handle if the cards could change.
+  \item \textbf{Sum of the player and opponent's costs} of already played cards calculated using the Bursztein's method.
+  \item \textbf{Player's hand strength}. The total cost of cards in the player's hand (calculated using the Bursztein's method).
+  \item \textbf{Minimum, Average, Maximum and Standard Deviation} of the crystal costs of the player's cards.
+  \item \textbf{Health points of both players}.
+  %\item \textbf{Number of cards in the deck} along with the \textbf{player's card advantage}.
+  \item \textbf{Matchup}. The probability of winning the game by the player based only on the class that the player and the opponent use. Some classes in Hearthstone counter other classes, which means that they have a higher probability of winning the game even before it starts. For instance, \emph{Warrior} counters \emph{Rogue} (different deck archetypes should be considered, but since the set contained only the basic cards, we decided to focus only on the general cases), and has about 60\% win percentage against this class. The probabilities were chosen solely based on our own experience. (It is worth noting that we tried to extract those values from the training set as well).
+ \item \textbf{Lethal possibility}. Knowing which minions are able to attack, we verified if the player is able to kill his opponent (and vice versa), also taking into account the minions with a taunt. This was presented as two binary features (\texttt{player\_lethal} and \texttt{opponent\_lethal}).
+ %\item \textbf{Sum of the health and attack values of the cards played by the player and the opponent}.
+ %\item \textbf{Additional basic features}, including turn, hands out, and more.
+\end{itemize}
+
+The feature importances were evaluated using random forests (the strength of the played cards, cards in player's hand and the health points of both players appeared to be the most important features).
+
+\section{Ensemble of Classifiers: How We Got There?}
+
+Our initial efforts were focused on training \textbf{artificial neural networks} (ANNs) of various architectures, along with the \textbf{logistic regression} and \textbf{random forest} classifiers. They were tuned using grid search on a randomly sampled subset of the entire training set $\TrainingSet$, containing $10^5$ examples (this subset was balanced). The best performance was exposed by the ANN and was $.7800$ for $\TestSet$ (on the other hand, applying the random forest gave $.7005$).
+
+Then, these classifiers were grouped into an ensemble of voting classifiers (the label with the larger number of votes wins---in the case of predicting the probability, the average probability was retrieved). The classifiers (of each type) were trained using $10$ equinumerous subsets (each containing $2\cdot 10^5$ examples) of the training set (with no overlaps). Therefore, the initial ensemble encompassed $90$ classifiers ($9$ classifiers---three best-performing models of each type---were trained for every subset). Finally, the ensemble was subsequently refined by removing the classifiers of each type separately. Although it was performed in the trial-and-error manner, we were able to boost the performance to $.7951$ on $\TestSet$ using the ensemble composed of the following classifiers (interestingly, the logistic regression classifiers were completely removed from the ensemble):
+\begin{itemize}
+  \item \textbf{ANN}, first hidden layer: 20 neurons, second hidden layer: 10 neurons, initial learning rate: $.001$, $\alpha=.1$
+  \item \textbf{ANN}, first hidden layer: 7 neurons, second hidden layer: 3 neurons, initial learning rate: $.01$, $\alpha=.001$
+  \item \textbf{Random forest}, maximum number of features: 13, minimum samples at a leaf: 50, minimum number of samples for each split: 30
+  \item \textbf{Random forest}, maximum number of features: 14, minimum samples at a leaf: 50, minimum number of samples for each split: 30
+\end{itemize}
+
+\section{Experiments and Setup}
+
+Our approach was implemented in \texttt{Python} using the \texttt{scikit-learn} library along with the \texttt{numpy} and \texttt{pandas} modules. The experiments were executed on a Phenom II x4 965 BE personal computer (8GB RAM).
+
+\section{What Else Could be Done?}
+
+Our efforts (unfinished due to the lack of resources) were focused on: (i)~including other types of classifiers (support vector machines alongside the $k$-nearest neighbor classifiers) into the ensemble, (ii)~more efficient ensemble pruning and weighting strategies~\cite{Krawczyk2015490}, (iii)~selecting valuable training sets for the classifiers~\cite{Nalepa2016113}, and (iv)~elaborating new features. These additional features (ideally reflecting other game characteristics) would most likely be pivotal to boost the performance of our ensembles.
+
+
+
+\bibliographystyle{splncs}
+\bibliography{ref_all_jn}
+
+\end{document}

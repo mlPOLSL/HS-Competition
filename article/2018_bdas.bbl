@@ -1,0 +1,15 @@
+\begin{thebibliography}{1}
+
+\bibitem{Krawczyk2015490}
+Krawczyk, B.:
+\newblock One-class classifier ensemble pruning and weighting with firefly
+  algorithm.
+\newblock Neurocomputing \textbf{150, Part B} (2015)  490 -- 500
+
+\bibitem{Nalepa2016113}
+Nalepa, J., Kawulok, M.:
+\newblock Adaptive memetic algorithm enhanced with data geometry analysis to
+  select training data for {SVMs}.
+\newblock Neurocomputing \textbf{185} (2016)  113 -- 132
+
+\end{thebibliography}
