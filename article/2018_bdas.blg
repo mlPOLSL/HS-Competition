@@ -1,8 +1,51 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: 2018_bdas.aux
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: 2018_bdas.aux
 The style file: splncs.bst
 Database file #1: ref_all_jn.bib
 You're missing a field part---line 486 of file ref_all_jn.bib
  :    eid = 
  :          ,
 I'm skipping whatever remains of this entry
+You've used 2 entries,
+            2087 wiz_defined-function locations,
+            504 strings with 4046 characters,
+and the built_in function-call counts, 744 in all, are:
+= -- 79
+> -- 12
+< -- 2
++ -- 5
+- -- 3
+* -- 47
+:= -- 96
+add.period$ -- 2
+call.type$ -- 2
+change.case$ -- 2
+chr.to.int$ -- 0
+cite$ -- 2
+duplicate$ -- 42
+empty$ -- 67
+format.name$ -- 3
+if$ -- 185
+int.to.chr$ -- 0
+int.to.str$ -- 2
+missing$ -- 2
+newline$ -- 13
+num.names$ -- 2
+pop$ -- 2
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 36
+stack$ -- 0
+substring$ -- 72
+swap$ -- 28
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 6
+width$ -- 3
+write$ -- 26
 (There was 1 error message)
